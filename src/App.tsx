@@ -13,6 +13,7 @@ import Canvas from './components/Canvas';
 import DepartmentPanel from './components/DepartmentPanel';
 import PropertyPanel from './components/PropertyPanel';
 import ConflictPanel from './components/ConflictPanel';
+import TransferRecordPanel from './components/TransferRecordPanel';
 
 const { Sider, Content } = Layout;
 
@@ -250,6 +251,7 @@ const App: React.FC = () => {
           </div>
         </Sider>
       </Layout>
+      <TransferRecordPanel />
     </Layout>
   );
 };

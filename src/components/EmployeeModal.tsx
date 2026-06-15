@@ -14,7 +14,7 @@ import {
   Popconfirm,
   Tag,
 } from 'antd';
-import { SearchOutlined, UserAddOutlined, ExportOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserAddOutlined, ExportOutlined, HistoryOutlined } from '@ant-design/icons';
 import { useAppStore } from '../store';
 import { Employee } from '../types';
 
@@ -33,6 +33,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ departmentId, open, onClo
     getDepartmentEmployees,
     getUnassignedEmployees,
     updateEmployee,
+    openTransferRecordDrawer,
   } = useAppStore();
 
   const [searchText, setSearchText] = useState('');
@@ -215,7 +216,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ departmentId, open, onClo
     {
       title: '操作',
       key: 'action',
-      width: 120,
+      width: 180,
       render: (_: any, record: Employee) => (
         <Space size="small">
           {activeTab === 'current' ? (
@@ -242,6 +243,17 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ departmentId, open, onClo
               调入
             </Button>
           )}
+          <Button
+            type="link"
+            size="small"
+            icon={<HistoryOutlined />}
+            onClick={() => {
+              onClose();
+              openTransferRecordDrawer(record.id);
+            }}
+          >
+            调动历史
+          </Button>
         </Space>
       ),
     },

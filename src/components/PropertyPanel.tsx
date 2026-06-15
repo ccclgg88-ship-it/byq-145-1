@@ -33,6 +33,7 @@ const PropertyPanel: React.FC = () => {
     deleteDepartment,
     getDepartmentEmployees,
     setSelectedNode,
+    openTransferRecordDrawer,
   } = useAppStore();
 
   const [form] = Form.useForm();
@@ -277,10 +278,21 @@ const PropertyPanel: React.FC = () => {
           {deptEmployees.length > 0 ? (
             <Space direction="vertical" style={{ width: '100%' }} size={8}>
               {deptEmployees.slice(0, 5).map(emp => (
-                <div key={emp.id} style={{ padding: '4px 0', borderBottom: '1px solid #f0f0f0' }}>
+                <div
+                  key={emp.id}
+                  style={{
+                    padding: '4px 0',
+                    borderBottom: '1px solid #f0f0f0',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                  }}
+                  onClick={() => openTransferRecordDrawer(emp.id)}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = '#f5f5f5')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                >
                   <div style={{ fontWeight: 500 }}>{emp.name}</div>
                   <div style={{ fontSize: 12, color: '#8c8c8c' }}>
-                    {emp.employeeId} · {emp.position}
+                    {emp.employeeId} · {emp.position} · <span style={{ color: '#1890ff' }}>查看调动历史</span>
                   </div>
                 </div>
               ))}

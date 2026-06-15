@@ -25,6 +25,7 @@ export interface Department {
 export interface TransferRecord {
   id: string;
   employeeId: string;
+  employeeCode: string;
   employeeName: string;
   fromDepartmentId: string | null;
   fromDepartmentName: string | null;

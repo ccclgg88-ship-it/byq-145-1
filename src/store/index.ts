@@ -18,6 +18,8 @@ interface AppState {
   selectedNodeId: string | null;
   selectedEdgeId: string | null;
   transferRecords: TransferRecord[];
+  transferRecordDrawerOpen: boolean;
+  transferRecordFilterEmployeeId: string | null;
   snapshots: Snapshot[];
   conflicts: Conflict[];
   hasUnsavedChanges: boolean;
@@ -57,6 +59,8 @@ interface AppActions {
   markAsSaved: () => void;
   getDepartmentEmployees: (deptId: string) => Employee[];
   getUnassignedEmployees: () => Employee[];
+  openTransferRecordDrawer: (filterEmployeeId?: string) => void;
+  closeTransferRecordDrawer: () => void;
 }
 
 const MAX_HISTORY = 20;
@@ -68,6 +72,8 @@ const initialState: AppState = {
   selectedNodeId: null,
   selectedEdgeId: null,
   transferRecords: [],
+  transferRecordDrawerOpen: false,
+  transferRecordFilterEmployeeId: null,
   snapshots: [],
   conflicts: [],
   hasUnsavedChanges: false,
@@ -437,6 +443,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
       const record: TransferRecord = {
         id: uuidv4(),
         employeeId,
+        employeeCode: employee.employeeId,
         employeeName: employee.name,
         fromDepartmentId: employee.departmentId,
         fromDepartmentName: fromDept?.name || null,
@@ -784,5 +791,19 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
 
   getUnassignedEmployees: () => {
     return get().employees.filter(e => e.departmentId === null);
+  },
+
+  openTransferRecordDrawer: (filterEmployeeId) => {
+    set({
+      transferRecordDrawerOpen: true,
+      transferRecordFilterEmployeeId: filterEmployeeId || null,
+    });
+  },
+
+  closeTransferRecordDrawer: () => {
+    set({
+      transferRecordDrawerOpen: false,
+      transferRecordFilterEmployeeId: null,
+    });
   },
 }));

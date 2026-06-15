@@ -27,6 +27,7 @@ import {
   PlayCircleOutlined,
   DeleteOutlined,
   SyncOutlined,
+  SwapOutlined,
 } from '@ant-design/icons';
 import { useAppStore } from '../store';
 import html2canvas from 'html2canvas';
@@ -51,6 +52,8 @@ const Toolbar: React.FC = () => {
     departments,
     employees,
     detectConflicts,
+    transferRecords,
+    openTransferRecordDrawer,
   } = useAppStore();
 
   const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
@@ -347,6 +350,14 @@ const Toolbar: React.FC = () => {
         <Dropdown menu={exportMenu} trigger={['click']}>
           <Button icon={<DownloadOutlined />}>导出</Button>
         </Dropdown>
+        <Button
+          icon={<SwapOutlined />}
+          onClick={() => openTransferRecordDrawer()}
+        >
+          <Badge count={transferRecords.length} size="small" offset={[5, -3]}>
+            调动记录
+          </Badge>
+        </Button>
         <Button
           icon={<HistoryOutlined />}
           onClick={() => setSnapshotModalOpen(true)}
