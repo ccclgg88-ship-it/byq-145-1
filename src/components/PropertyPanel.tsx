@@ -76,11 +76,22 @@ const PropertyPanel: React.FC = () => {
   const deptEmployees = getDepartmentEmployees(selectedDept.id);
   const manager = employees.find(e => e.id === selectedDept.managerId);
   const parentDept = departments.find(d => d.id === selectedDept.parentId);
+  const deptMap = new Map(departments.map(d => [d.id, d.name]));
 
-  const employeeOptions = deptEmployees.map(e => ({
-    value: e.id,
-    label: `${e.name} (${e.employeeId})`,
-  }));
+  const employeeOptions = employees.map(e => {
+    const deptName = e.departmentId ? deptMap.get(e.departmentId) : '未分配';
+    const isCurrentDept = e.departmentId === selectedDept.id;
+    return {
+      value: e.id,
+      label: `${e.name} (${e.employeeId})${deptName ? ` - ${deptName}${isCurrentDept ? ' (本部门)' : ''}` : ''}`,
+    };
+  }).sort((a, b) => {
+    const aIsCurrent = a.label.includes('(本部门)');
+    const bIsCurrent = b.label.includes('(本部门)');
+    if (aIsCurrent && !bIsCurrent) return -1;
+    if (!aIsCurrent && bIsCurrent) return 1;
+    return a.label.localeCompare(b.label);
+  });
 
   const departmentOptions = departments
     .filter(d => d.id !== selectedDept.id && d.status !== 'revoked')
@@ -206,10 +217,17 @@ const PropertyPanel: React.FC = () => {
 
             <Form.Item name="managerId" label="负责人">
               <Select
-                placeholder="请选择负责人"
+                placeholder="请选择负责人（支持搜索姓名/工号/部门）"
                 allowClear
                 options={employeeOptions}
                 disabled={selectedDept.status === 'revoked'}
+                showSearch
+                optionFilterProp="label"
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+                style={{ width: '100%' }}
+                listHeight={300}
               />
             </Form.Item>
 

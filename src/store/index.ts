@@ -559,6 +559,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
       if (state.historyIndex < 0) return state;
       
       const actions = state.history[state.historyIndex];
+      let newSelectedNodeId = state.selectedNodeId;
       const newState = produce(state, draft => {
         actions.reverse().forEach(action => {
           switch (action.type) {
@@ -566,6 +567,10 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
               const idx = draft.departments.findIndex(d => d.id === action.payload.id);
               if (idx !== -1) draft.departments.splice(idx, 1);
               draft.edges = draft.edges.filter(e => e.source !== action.payload.id && e.target !== action.payload.id);
+              if (draft.selectedNodeId === action.payload.id) {
+                draft.selectedNodeId = null;
+                newSelectedNodeId = null;
+              }
               break;
             }
             case 'UPDATE_NODE': {
@@ -675,6 +680,9 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
               draft.employees.forEach(e => {
                 if (e.departmentId === action.payload) e.departmentId = null;
               });
+              if (draft.selectedNodeId === action.payload) {
+                draft.selectedNodeId = null;
+              }
               break;
             }
             case 'MOVE_NODE': {
