@@ -119,34 +119,62 @@ const App: React.FC = () => {
           style={{ background: '#fff', borderRight: '1px solid #f0f0f0' }}
           trigger={null}
           collapsedWidth={0}
+          zeroWidthTriggerStyle={{ display: 'none' }}
         >
-          <div style={{ position: 'relative', height: '100%' }}>
+          <div style={{ height: '100%', overflow: 'auto' }}>
             {!leftCollapsed && <DepartmentPanel />}
-            <Button
-              type="text"
-              icon={leftCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setLeftCollapsed(!leftCollapsed)}
-              style={{
-                position: 'absolute',
-                top: 8,
-                right: leftCollapsed ? -32 : 8,
-                zIndex: 100,
-                background: '#fff',
-                border: '1px solid #f0f0f0',
-              }}
-            />
           </div>
         </Sider>
 
         <Content style={{ position: 'relative', overflow: 'hidden' }}>
           <Canvas />
           
+          {/* 左侧折叠/展开按钮 - 固定在画布左边缘 */}
+          <Button
+            type="primary"
+            shape="circle"
+            size="small"
+            icon={leftCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setLeftCollapsed(!leftCollapsed)}
+            title={leftCollapsed ? '展开部门库' : '收起部门库'}
+            style={{
+              position: 'absolute',
+              top: 16,
+              left: leftCollapsed ? 16 : 296,
+              zIndex: 200,
+              width: 28,
+              height: 28,
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              transition: 'left 0.2s ease',
+            }}
+          />
+
+          {/* 右侧折叠/展开按钮 - 固定在画布右边缘 */}
+          <Button
+            type="primary"
+            shape="circle"
+            size="small"
+            icon={rightCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setRightCollapsed(!rightCollapsed)}
+            title={rightCollapsed ? '展开属性面板' : '收起属性面板'}
+            style={{
+              position: 'absolute',
+              top: 16,
+              right: rightCollapsed ? 16 : 316,
+              zIndex: 200,
+              width: 28,
+              height: 28,
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              transition: 'right 0.2s ease',
+            }}
+          />
+
           {showConflict && (
             <div style={{
               position: 'absolute',
-              left: 16,
+              left: 60,
               bottom: 16,
-              right: leftCollapsed ? 16 : 312,
+              right: 60,
               maxHeight: '40%',
               overflow: 'auto',
               zIndex: 100,
@@ -157,8 +185,8 @@ const App: React.FC = () => {
 
           <div style={{
             position: 'absolute',
-            left: 16,
-            top: 16,
+            left: 60,
+            top: 56,
             background: 'rgba(255, 255, 255, 0.95)',
             padding: '8px 16px',
             borderRadius: 6,
@@ -175,7 +203,7 @@ const App: React.FC = () => {
 
           <div style={{
             position: 'absolute',
-            right: rightCollapsed ? 16 : 312,
+            right: 60,
             bottom: 16,
             background: 'rgba(255, 255, 255, 0.9)',
             padding: 8,
@@ -196,7 +224,7 @@ const App: React.FC = () => {
             onClick={() => setShowConflict(!showConflict)}
             style={{
               position: 'absolute',
-              left: 16,
+              left: 60,
               bottom: showConflict ? 'calc(40% + 24px)' : 16,
               background: '#fff',
               border: '1px solid #f0f0f0',
@@ -215,22 +243,10 @@ const App: React.FC = () => {
           style={{ background: '#fff', borderLeft: '1px solid #f0f0f0' }}
           trigger={null}
           collapsedWidth={0}
+          zeroWidthTriggerStyle={{ display: 'none' }}
         >
-          <div style={{ position: 'relative', height: '100%' }}>
+          <div style={{ height: '100%', overflow: 'auto' }}>
             {!rightCollapsed && <PropertyPanel />}
-            <Button
-              type="text"
-              icon={rightCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setRightCollapsed(!rightCollapsed)}
-              style={{
-                position: 'absolute',
-                top: 8,
-                left: rightCollapsed ? -32 : 8,
-                zIndex: 100,
-                background: '#fff',
-                border: '1px solid #f0f0f0',
-              }}
-            />
           </div>
         </Sider>
       </Layout>
